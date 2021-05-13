@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: abtestwebsite
+spec:
+  selector:
+    matchLabels:
+      app: abtestwebsite
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: abtestwebsite
+    spec:
+      containers:
+      - name: abtestwebsite
+        image: abtestacr.azurecr.io/abtestwebsite:latest
+        imagePullPolicy: Always
+        readinessProbe:
+          httpGet:
+            port: 8080
+            path: /
+          livenessProbe:
+            httpGet:
+              port: 8080
+              path: /
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
